@@ -3,6 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const server = express();
 const router = require('./routes/index')
+const connectDB = require('./database/mongo');
+
+
 
 server.use(express.urlencoded());
 server.use(express.json());
@@ -14,8 +17,10 @@ server.use((req, res, next) => {
 
 server.use('/api', router);
 
-server.listen(process.env.PORT, () => {
-  console.log(`Example server listening on port ${process.env.PORT}`)
+connectDB().then(() => {
+  server.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+  });
 });
 
 module.exports = server;
